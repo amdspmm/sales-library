@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
 import AssetThumbnail from '@/components/AssetThumbnail'
@@ -48,22 +48,40 @@ export default function Home() {
   const [searched, setSearched] = useState(false)
   const [recent, setRecent] = useState<any[]>([])
   const [allEntries, setAllEntries] = useState<any[]>([])
-  const [showAll, setShowAll] = useState(false)
+  const [activeTag, setActiveTag] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/entries?limit=3').then(r => r.json()).then(d => setRecent(d.entries ?? []))
     fetch('/api/entries').then(r => r.json()).then(d => setAllEntries(d.entries ?? []))
   }, [])
 
+  const tags = useMemo(() => {
+    const counts: Record<string, number> = {}
+    allEntries.forEach(e => (e.tags ?? []).forEach((t: string) => { counts[t] = (counts[t] ?? 0) + 1 }))
+    return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([tag]) => tag)
+  }, [allEntries])
+
+  const filteredEntries = useMemo(() =>
+    activeTag ? allEntries.filter(e => (e.tags ?? []).includes(activeTag)) : allEntries,
+    [allEntries, activeTag]
+  )
+
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
     if (!query.trim()) return
     setLoading(true)
     setSearched(true)
+    setActiveTag(null)
     const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
     const data = await res.json()
     setResults(data.results ?? [])
     setLoading(false)
+  }
+
+  function handleTagClick(tag: string) {
+    setActiveTag(prev => prev === tag ? null : tag)
+    setSearched(false)
+    setQuery('')
   }
 
   return (
@@ -92,7 +110,7 @@ export default function Home() {
           <p className="text-base text-gray-500">Search for assets, objection handling, personas, and more.</p>
         </div>
 
-        <form onSubmit={handleSearch} className="flex gap-2 mb-2">
+        <form onSubmit={handleSearch} className="flex gap-2 mb-5">
           <input
             type="text"
             value={query}
@@ -110,22 +128,38 @@ export default function Home() {
           </button>
         </form>
 
-        {!searched && allEntries.length > 0 && (
-          <div className="flex gap-4 mb-10">
-            <button onClick={() => setShowAll(!showAll)} className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
-              {showAll ? 'Hide' : `Browse all ${allEntries.length} assets`}
-            </button>
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-10">
+            {tags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => handleTagClick(tag)}
+                className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
+                  activeTag === tag
+                    ? 'border-transparent font-medium'
+                    : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                }`}
+                style={activeTag === tag ? { background: '#e5df00', color: '#000000', borderColor: '#e5df00' } : {}}
+              >
+                {tag}
+              </button>
+            ))}
           </div>
         )}
 
-        {!searched && showAll && (
+        {/* Tag filter results */}
+        {!searched && activeTag && (
           <div className="space-y-2">
-            {allEntries.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
+            <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">
+              {filteredEntries.length} asset{filteredEntries.length !== 1 ? 's' : ''} tagged "{activeTag}"
+            </p>
+            {filteredEntries.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
           </div>
         )}
 
-        {!searched && !showAll && recent.length > 0 && (
-          <div className="mt-2">
+        {/* Default: recently added */}
+        {!searched && !activeTag && recent.length > 0 && (
+          <div>
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">Recently Added</p>
             <div className="space-y-2">
               {recent.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
@@ -133,9 +167,12 @@ export default function Home() {
           </div>
         )}
 
-        {results.length > 0 && (
-          <div className="mt-8 space-y-2">
-            <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">{results.length} result{results.length !== 1 ? 's' : ''}</p>
+        {/* Search results */}
+        {searched && results.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">
+              {results.length} result{results.length !== 1 ? 's' : ''}
+            </p>
             {results.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
           </div>
         )}
