@@ -71,7 +71,7 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <div className="px-6 pt-5">
         <header className="bg-white border border-gray-100 rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm max-w-5xl mx-auto">
-          <h1 className="text-lg font-bold" style={{ fontFamily: 'Lora, Georgia, serif', color: '#000000' }}>Sales Library°</h1>
+          <h1 className="text-lg font-bold" style={{ fontFamily: 'IBM Plex Sans, sans-serif', color: '#000000' }}>Sales Library</h1>
           <div className="flex gap-4 items-center">
             {isAdmin(session?.user?.email) && (
               <a href="/admin" className="text-sm font-medium hover:opacity-70 transition" style={{ color: '#000000' }}>Admin</a>

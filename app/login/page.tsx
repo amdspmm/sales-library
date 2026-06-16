@@ -5,7 +5,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="bg-white p-10 rounded-2xl shadow-md text-center max-w-sm w-full">
-        <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: 'Lora, Georgia, serif', color: '#000000' }}>Sales Library°</h1>
+        <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: 'IBM Plex Sans, sans-serif', color: '#000000' }}>Sales Library</h1>
         <p className="mb-8 text-sm" style={{ color: '#6b7a00' }}>Sign in with your DocuSketch account</p>
         <button
           onClick={() => signIn('google', { callbackUrl: '/' })}

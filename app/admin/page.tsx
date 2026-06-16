@@ -96,7 +96,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-white">
       <div className="px-6 pt-5">
         <header className="bg-white rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm max-w-5xl mx-auto">
-          <h1 className="text-lg font-bold" style={{ fontFamily: 'Lora, Georgia, serif', color: '#000000' }}>Sales Library° — Admin</h1>
+          <h1 className="text-lg font-bold" style={{ fontFamily: 'IBM Plex Sans, sans-serif', color: '#000000' }}>Sales Library — Admin</h1>
           <div className="flex gap-4 items-center">
             <a href="/browse" className="text-sm font-medium hover:opacity-70" style={{ color: '#000000' }}>Quick Edit</a>
             <a href="/" className="text-sm font-medium px-4 py-2 rounded-xl" style={{ background: '#e5df00', color: '#000000' }}>← Back to library</a>
