@@ -39,7 +39,7 @@ export default function Home() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="e.g. How do I talk to a CFO about ROI?"
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"

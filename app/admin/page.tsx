@@ -93,16 +93,16 @@ export default function AdminPage() {
           <h2 className="font-semibold text-gray-900 mb-4">{editing ? 'Edit Entry' : 'Add New Entry'}</h2>
           <form onSubmit={handleSave} className="space-y-3">
             <input required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
-              placeholder="Title" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              placeholder="Title" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <input required value={form.summary} onChange={e => setForm({...form, summary: e.target.value})}
-              placeholder="Short summary (shown in search results)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              placeholder="Short summary (shown in search results)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <textarea value={form.content} onChange={e => setForm({...form, content: e.target.value})}
               placeholder="Full content / talking points (optional)" rows={5}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <input value={form.url} onChange={e => setForm({...form, url: e.target.value})}
-              placeholder="Link to asset (optional)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              placeholder="Link to asset (optional)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <input value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
-              placeholder="Tags, comma separated (e.g. CFO, ROI, objection)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+              placeholder="Tags, comma separated (e.g. CFO, ROI, objection)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <div className="flex gap-2 pt-1">
               <button type="submit" disabled={saving}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50">
