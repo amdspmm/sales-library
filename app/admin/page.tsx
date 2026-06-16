@@ -119,6 +119,10 @@ function AdminPageInner() {
 
       <main className="max-w-3xl mx-auto px-6 py-10 space-y-8">
 
+        {editing && (
+          <a href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">← Back to library</a>
+        )}
+
         {/* Form */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="font-semibold text-gray-900 mb-5" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
@@ -163,7 +167,7 @@ function AdminPageInner() {
         </div>
 
         {/* Entry list */}
-        <div>
+        {!editing && <div>
           <h2 className="font-semibold text-gray-900 mb-4" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             All Entries <span className="text-gray-400 font-normal">({entries.length})</span>
           </h2>
@@ -204,7 +208,7 @@ function AdminPageInner() {
               ))}
             </div>
           )}
-        </div>
+        </div>}
 
       </main>
     </div>
