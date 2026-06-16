@@ -54,6 +54,7 @@ export default function BrowsePage() {
       </nav>
 
       <main className="max-w-3xl mx-auto px-6 py-10">
+        <a href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors mb-6 inline-block">← Back to library</a>
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl font-semibold text-gray-900" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             All Assets {!loading && <span className="text-gray-400 font-normal text-base">({entries.length})</span>}
