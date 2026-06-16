@@ -169,9 +169,17 @@ function AdminPageInner() {
               {FILE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
 
-            <input value={form.topic} onChange={e => setForm({...form, topic: e.target.value})}
-              placeholder="Product / Topic (optional)"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+            <select value={form.topic} onChange={e => setForm({...form, topic: e.target.value})}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
+              <option value="">Product / Topic (optional)</option>
+              <option>Sketching</option>
+              <option>Mitigation</option>
+              <option>Documenting/Camera</option>
+              <option>Scoping</option>
+              <option>Estimating</option>
+              <option>General</option>
+              <option>Other</option>
+            </select>
             <select value={form.safe_to_share} onChange={e => setForm({...form, safe_to_share: e.target.value})}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
               <option value="">Sharing — not set</option>
