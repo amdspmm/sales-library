@@ -272,6 +272,68 @@ function AdminPageInner() {
           </form>
         </div>
 
+        {/* User preview */}
+        {editing && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-5">What users see</p>
+            <div className="flex items-start gap-4 mb-4">
+              {form.file_type && (
+                <div className="shrink-0 mt-1">
+                  <AssetThumbnail fileType={form.file_type} />
+                </div>
+              )}
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 leading-snug" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
+                  {form.title || <span className="text-gray-300">Title</span>}
+                </h2>
+                {form.file_type && <p className="text-sm text-gray-400 mt-1">{form.file_type}</p>}
+              </div>
+            </div>
+            {form.summary && <p className="text-base text-gray-600 leading-relaxed mb-4">{form.summary}</p>}
+            {form.content && (
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-4">
+                <p className="text-sm font-medium text-gray-500 mb-2">Details</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{form.content}</p>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {form.file_type && (
+                <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-700 text-white">{form.file_type}</span>
+              )}
+              {form.topic && (
+                <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">{form.topic}</span>
+              )}
+              {form.tags.map(tag => (
+                <span key={tag} className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-500">{tag}</span>
+              ))}
+            </div>
+            <div className="flex items-center gap-4 mb-5">
+              {editing.created_at && (
+                <span className="text-xs text-gray-400">
+                  Created: {new Date(editing.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })}
+                </span>
+              )}
+              {form.safe_to_share === 'true' && <span className="text-xs font-medium text-green-700">✓ Safe to share externally</span>}
+              {form.safe_to_share === 'false' && <span className="text-xs font-medium text-red-600">⚠ Internal only</span>}
+            </div>
+            <div className="flex items-center gap-3">
+              {form.url && (
+                <a href={form.url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-semibold hover:opacity-80 transition-opacity"
+                  style={{ background: '#e5df00', color: '#000000' }}>
+                  Open asset →
+                </a>
+              )}
+              {form.url && (
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-gray-300 bg-white text-gray-600">
+                  Copy link
+                </span>
+              )}
+              {!form.url && <p className="text-sm text-gray-400">No link available for this asset yet.</p>}
+            </div>
+          </div>
+        )}
+
         {/* Entry list */}
         {!editing && <div>
           <h2 className="font-semibold text-gray-900 mb-4" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
