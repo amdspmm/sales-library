@@ -185,7 +185,7 @@ export default function Home() {
         {/* Default: recently added */}
         {!searched && !activeTag && recent.length > 0 && (
           <div>
-            <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">Recently Added</p>
+            <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">Recently Added / Updated</p>
             <div className="space-y-2">
               {recent.map((item: any) => <AssetCard key={item.id} item={item} admin={admin} />)}
             </div>
