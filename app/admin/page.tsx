@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 import { isAdmin } from '@/lib/admins'
@@ -23,7 +23,7 @@ function AdminPageInner() {
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Entry | null>(null)
-  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: '' })
+  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] as string[] })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -36,6 +36,13 @@ function AdminPageInner() {
       if (entry) startEdit(entry)
     }
   }, [entries, searchParams])
+
+  // Derive all unique Kind values from existing entries, sorted alphabetically
+  const allKinds = useMemo(() => {
+    const set = new Set<string>()
+    entries.forEach(e => (e.tags ?? []).forEach(t => set.add(t)))
+    return Array.from(set).sort()
+  }, [entries])
 
   if (!isAdmin(session?.user?.email)) {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Access denied.</div>
@@ -50,7 +57,7 @@ function AdminPageInner() {
 
   function startNew() {
     setEditing(null)
-    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: '' })
+    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] })
     setMessage('')
   }
 
@@ -58,13 +65,20 @@ function AdminPageInner() {
     setEditing(entry)
     setForm({
       title: entry.title,
-      summary: entry.summary,
-      content: entry.content,
+      summary: entry.summary ?? '',
+      content: entry.content ?? '',
       url: entry.url ?? '',
       file_type: entry.file_type ?? '',
-      tags: (entry.tags ?? []).join(', '),
+      tags: entry.tags ?? [],
     })
     setMessage('')
+  }
+
+  function toggleTag(tag: string) {
+    setForm(prev => ({
+      ...prev,
+      tags: prev.tags.includes(tag) ? prev.tags.filter(t => t !== tag) : [...prev.tags, tag],
+    }))
   }
 
   async function handleSave(e: React.FormEvent) {
@@ -72,7 +86,6 @@ function AdminPageInner() {
     setSaving(true)
     const body = {
       ...form,
-      tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
       id: editing?.id,
       file_type: form.file_type || null,
     }
@@ -84,7 +97,7 @@ function AdminPageInner() {
     if (res.ok) {
       setMessage(editing ? 'Updated!' : 'Added!')
       setEditing(null)
-      setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: '' })
+      setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] })
       fetchEntries()
     } else {
       setMessage('Something went wrong.')
@@ -149,9 +162,52 @@ function AdminPageInner() {
               <option value="">File type (optional)</option>
               {FILE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
-            <input value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
-              placeholder="Tags, comma separated"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+
+            {/* Kind multi-select */}
+            <div>
+              <p className="text-sm text-gray-500 mb-2">Kind</p>
+              {allKinds.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {allKinds.map(kind => (
+                    <button
+                      key={kind}
+                      type="button"
+                      onClick={() => toggleTag(kind)}
+                      className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
+                        form.tags.includes(kind)
+                          ? 'border-transparent font-medium'
+                          : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                      }`}
+                      style={form.tags.includes(kind) ? { background: '#e5df00', color: '#000000', borderColor: '#e5df00' } : {}}
+                    >
+                      {kind}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-gray-400">No kinds defined yet — add entries first.</p>
+              )}
+              {/* New kind input */}
+              <div className="mt-2 flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Add a new kind..."
+                  className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      const val = (e.target as HTMLInputElement).value.trim()
+                      if (val && !form.tags.includes(val)) {
+                        setForm(prev => ({ ...prev, tags: [...prev.tags, val] }))
+                      }
+                      ;(e.target as HTMLInputElement).value = ''
+                    }
+                  }}
+                />
+                <span className="text-xs text-gray-400 self-center">press Enter to add</span>
+              </div>
+            </div>
+
             <div className="flex gap-2 pt-1">
               <button type="submit" disabled={saving}
                 className="px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 transition-opacity"
