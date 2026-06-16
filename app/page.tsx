@@ -14,6 +14,8 @@ export default function Home() {
   const [recent, setRecent] = useState<any[]>([])
   const [allEntries, setAllEntries] = useState<any[]>([])
   const [activeTag, setActiveTag] = useState<string | null>(null)
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
 
   useEffect(() => {
     fetch('/api/entries?limit=3').then(r => r.json()).then(d => setRecent(d.entries ?? []))
@@ -31,16 +33,50 @@ export default function Home() {
     [allEntries, activeTag]
   )
 
-  async function handleSearch(e: React.FormEvent) {
-    e.preventDefault()
-    if (!query.trim()) return
+  const suggestions = useMemo(() => {
+    if (!query.trim() || query.length < 2) return []
+    const q = query.toLowerCase()
+    return allEntries
+      .filter(e => e.title?.toLowerCase().includes(q) || e.summary?.toLowerCase().includes(q))
+      .slice(0, 6)
+  }, [query, allEntries])
+
+  async function handleSearch(e?: React.FormEvent, overrideQuery?: string) {
+    e?.preventDefault()
+    const q = overrideQuery ?? query
+    if (!q.trim()) return
+    setShowSuggestions(false)
+    setHighlightedIndex(-1)
     setLoading(true)
     setSearched(true)
     setActiveTag(null)
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
+    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`)
     const data = await res.json()
     setResults(data.results ?? [])
     setLoading(false)
+  }
+
+  function handleSuggestionClick(item: any) {
+    setQuery(item.title)
+    setShowSuggestions(false)
+    handleSearch(undefined, item.title)
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (!showSuggestions || suggestions.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setHighlightedIndex(i => Math.min(i + 1, suggestions.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setHighlightedIndex(i => Math.max(i - 1, -1))
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault()
+      handleSuggestionClick(suggestions[highlightedIndex])
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false)
+      setHighlightedIndex(-1)
+    }
   }
 
   function handleTagClick(tag: string) {
@@ -75,22 +111,46 @@ export default function Home() {
           <p className="text-base text-gray-500">Search for assets, objection handling, personas, and more.</p>
         </div>
 
-        <form onSubmit={handleSearch} className="flex gap-2 mb-5">
-          <input
-            type="text"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            placeholder="e.g. How do I talk to a CFO about ROI?"
-            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-5 py-2.5 rounded-md text-sm font-semibold disabled:opacity-50 transition-opacity"
-            style={{ background: '#e5df00', color: '#000000' }}
-          >
-            {loading ? 'Searching...' : 'Search'}
-          </button>
+        <form onSubmit={handleSearch} className="relative mb-5">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={query}
+                onChange={e => { setQuery(e.target.value); setShowSuggestions(true); setHighlightedIndex(-1) }}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                onKeyDown={handleKeyDown}
+                placeholder="e.g. How do I talk to a CFO about ROI?"
+                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
+                autoComplete="off"
+              />
+              {showSuggestions && suggestions.length > 0 && (
+                <ul className="absolute z-10 top-full mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden">
+                  {suggestions.map((item, i) => (
+                    <li
+                      key={item.id}
+                      onMouseDown={() => handleSuggestionClick(item)}
+                      className={`px-4 py-2.5 text-sm cursor-pointer flex items-center gap-3 ${
+                        i === highlightedIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
+                      }`}
+                    >
+                      <span className="text-gray-400 text-xs shrink-0">{item.file_type ?? 'Asset'}</span>
+                      <span className="text-gray-900 truncate">{item.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-5 py-2.5 rounded-md text-sm font-semibold disabled:opacity-50 transition-opacity shrink-0"
+              style={{ background: '#e5df00', color: '#000000' }}
+            >
+              {loading ? 'Searching...' : 'Search'}
+            </button>
+          </div>
         </form>
 
         {tags.length > 0 && (
