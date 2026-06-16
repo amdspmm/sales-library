@@ -14,10 +14,10 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
   const body = await req.json()
-  const { title, summary, content, url, file_type, tags } = body
+  const { title, summary, content, url, file_type, tags, topic, safe_to_share } = body
   const { data, error } = await supabaseAdmin
     .from('entries')
-    .insert({ title, summary, content, url, file_type, tags })
+    .insert({ title, summary, content, url, file_type, tags, topic, safe_to_share })
     .select()
     .single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
@@ -29,7 +29,7 @@ export async function PUT(req: NextRequest) {
   const body = await req.json()
   const { id, ...fields } = body
   const update: Record<string, any> = {}
-  for (const key of ['title', 'summary', 'content', 'url', 'file_type', 'tags']) {
+  for (const key of ['title', 'summary', 'content', 'url', 'file_type', 'tags', 'topic', 'safe_to_share']) {
     if (key in fields) update[key] = fields[key]
   }
   const { data, error } = await supabaseAdmin

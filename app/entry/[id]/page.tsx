@@ -90,16 +90,36 @@ export default function EntryPage() {
               </div>
             )}
 
-            {entry.tags && entry.tags.length > 0 && (
-              <div className="flex gap-2 flex-wrap mb-8">
-                {entry.tags.map((tag: string) => (
-                  <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
-                    className="text-xs bg-gray-100 text-gray-500 px-2.5 py-1 rounded-md hover:bg-gray-200 transition-colors">
-                    {tag}
-                  </a>
-                ))}
-              </div>
-            )}
+            {/* Metadata chicklets */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {entry.file_type && (
+                <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-slate-700 text-white">{entry.file_type}</span>
+              )}
+              {entry.topic && (
+                <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">{entry.topic}</span>
+              )}
+              {entry.tags && entry.tags.map((tag: string) => (
+                <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
+                  className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+                  {tag}
+                </a>
+              ))}
+            </div>
+
+            {/* Date + safety */}
+            <div className="flex items-center gap-4 mb-8">
+              {entry.created_at && (
+                <span className="text-xs text-gray-400">
+                  Added {new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </span>
+              )}
+              {entry.safe_to_share === true && (
+                <span className="text-xs font-medium text-green-700">✓ Safe to share externally</span>
+              )}
+              {entry.safe_to_share === false && (
+                <span className="text-xs font-medium text-red-600">⚠ Internal only</span>
+              )}
+            </div>
 
             <div className="flex items-center gap-3">
               {entry.url && (

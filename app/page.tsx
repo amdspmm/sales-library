@@ -2,37 +2,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
-import AssetThumbnail from '@/components/AssetThumbnail'
-
-function ResultCard({ item, admin }: { item: any; admin: boolean }) {
-  return (
-    <div className="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors">
-      <div className="flex items-start gap-4">
-        {item.file_type && (
-          <div className="shrink-0 mt-0.5">
-            {item.url
-              ? <a href={item.url} target="_blank" rel="noopener noreferrer"><AssetThumbnail fileType={item.file_type} /></a>
-              : <AssetThumbnail fileType={item.file_type} />
-            }
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <a href={`/entry/${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
-          {item.summary && <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>}
-          {item.content && <p className="mt-2 text-sm text-gray-600 whitespace-pre-wrap">{item.content}</p>}
-          {item.tags && item.tags.length > 0 && (
-            <div className="mt-3 flex gap-1.5 flex-wrap">
-              {item.tags.map((tag: string) => (
-                <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
-                  className="text-xs bg-gray-100 text-gray-500 px-2.5 py-1 rounded-md hover:bg-gray-200 transition-colors">{tag}</a>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
+import AssetCard from '@/components/AssetCard'
 
 export default function Home() {
   const { data: session } = useSession()
@@ -148,7 +118,7 @@ export default function Home() {
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">
               {filteredEntries.length} asset{filteredEntries.length !== 1 ? 's' : ''} tagged "{activeTag}"
             </p>
-            {filteredEntries.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
+            {filteredEntries.map((item: any) => <AssetCard key={item.id} item={item} admin={admin} activeTag={activeTag} />)}
           </div>
         )}
 
@@ -157,7 +127,7 @@ export default function Home() {
           <div>
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">Recently Added</p>
             <div className="space-y-2">
-              {recent.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
+              {recent.map((item: any) => <AssetCard key={item.id} item={item} admin={admin} />)}
             </div>
             <a href="/browse" className="mt-4 inline-block text-sm text-gray-400 hover:text-gray-600 transition-colors">
               View all {allEntries.length > 0 ? `${allEntries.length} ` : ''}assets →
@@ -171,7 +141,7 @@ export default function Home() {
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">
               {results.length} result{results.length !== 1 ? 's' : ''}
             </p>
-            {results.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
+            {results.map((item: any) => <AssetCard key={item.id} item={item} admin={admin} />)}
           </div>
         )}
 

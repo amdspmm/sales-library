@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
-import AssetThumbnail from '@/components/AssetThumbnail'
+import AssetCard from '@/components/AssetCard'
 
 export default function TagPage() {
   const { data: session } = useSession()
+  const admin = isAdmin(session?.user?.email)
   const params = useParams()
   const tag = decodeURIComponent(params.tag as string)
   const [entries, setEntries] = useState<any[]>([])
@@ -27,7 +28,7 @@ export default function TagPage() {
             DocuSketch Sales & CS Library
           </a>
           <div className="flex items-center gap-6">
-            {isAdmin(session?.user?.email) && (
+            {admin && (
               <a href="/admin" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Admin</a>
             )}
             <button onClick={() => signOut()}
@@ -53,34 +54,7 @@ export default function TagPage() {
           <p className="text-sm text-gray-400">No entries found for this tag.</p>
         ) : (
           <div className="space-y-2">
-            {entries.map((item: any) => (
-              <div key={item.id} className="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors">
-                <div className="flex items-start gap-4">
-                  {item.file_type && (
-                    <div className="shrink-0 mt-0.5">
-                      {item.url
-                        ? <a href={item.url} target="_blank" rel="noopener noreferrer"><AssetThumbnail fileType={item.file_type} /></a>
-                        : <AssetThumbnail fileType={item.file_type} />
-                      }
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <a href={`/entry/${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
-                    {item.summary && <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>}
-                    {item.tags && item.tags.length > 0 && (
-                      <div className="mt-3 flex gap-1.5 flex-wrap">
-                        {item.tags.map((t: string) => (
-                          <a key={t} href={`/tag/${encodeURIComponent(t)}`}
-                            className={`text-xs px-2.5 py-1 rounded-md transition-colors ${t === tag ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
-                            {t}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+            {entries.map((item: any) => <AssetCard key={item.id} item={item} admin={admin} activeTag={tag} />)}
           </div>
         )}
       </main>

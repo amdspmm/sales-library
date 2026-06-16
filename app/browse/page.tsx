@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
-import AssetThumbnail from '@/components/AssetThumbnail'
+import AssetCard from '@/components/AssetCard'
 
 export default function BrowsePage() {
   const { data: session } = useSession()
@@ -71,52 +71,27 @@ export default function BrowsePage() {
         ) : (
           <div className="space-y-2">
             {entries.map((item: any) => (
-              <div key={item.id} className="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors">
-                <div className="flex items-start gap-4">
-                  {item.file_type && (
-                    <div className="shrink-0 mt-0.5">
-                      {item.url
-                        ? <a href={item.url} target="_blank" rel="noopener noreferrer"><AssetThumbnail fileType={item.file_type} /></a>
-                        : <AssetThumbnail fileType={item.file_type} />
-                      }
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <a href={`/entry/${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
-                    {item.summary && <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>}
-                    {item.tags && item.tags.length > 0 && (
-                      <div className="mt-3 flex gap-1.5 flex-wrap">
-                        {item.tags.map((tag: string) => (
-                          <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
-                            className="text-xs bg-gray-100 text-gray-500 px-2.5 py-1 rounded-md hover:bg-gray-200 transition-colors">{tag}</a>
-                        ))}
-                      </div>
-                    )}
-                    {editMode && (
-                      <div className="mt-3 flex gap-2">
-                        <input
-                          type="text"
-                          defaultValue={item.url ?? ''}
-                          placeholder="Paste URL here..."
-                          onChange={e => setUrlDrafts(prev => ({ ...prev, [item.id]: e.target.value }))}
-                          className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400"
-                        />
-                        <button
-                          onClick={() => saveUrl(item.id)}
-                          disabled={saving === item.id}
-                          className="text-sm px-3 py-1.5 rounded-md font-medium disabled:opacity-50"
-                          style={{ background: '#e5df00', color: '#000000' }}
-                        >
-                          {saving === item.id ? '...' : 'Save'}
-                        </button>
-                      </div>
-                    )}
-                    {!editMode && item.url && (
-                      <a href={item.url} target="_blank" rel="noopener noreferrer"
-                        className="mt-1 block text-xs text-gray-400 hover:text-gray-600 truncate">{item.url}</a>
-                    )}
+              <div key={item.id}>
+                <AssetCard item={item} admin={admin} />
+                {editMode && (
+                  <div className="mt-1 flex gap-2 px-1">
+                    <input
+                      type="text"
+                      defaultValue={item.url ?? ''}
+                      placeholder="Paste URL here..."
+                      onChange={e => setUrlDrafts(prev => ({ ...prev, [item.id]: e.target.value }))}
+                      className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                    />
+                    <button
+                      onClick={() => saveUrl(item.id)}
+                      disabled={saving === item.id}
+                      className="text-sm px-3 py-1.5 rounded-md font-medium disabled:opacity-50"
+                      style={{ background: '#e5df00', color: '#000000' }}
+                    >
+                      {saving === item.id ? '...' : 'Save'}
+                    </button>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>

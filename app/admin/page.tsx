@@ -13,6 +13,8 @@ type Entry = {
   url: string
   file_type: string
   tags: string[]
+  topic: string
+  safe_to_share: boolean | null
 }
 
 const FILE_TYPES = ['PDF', 'Video', 'Email', 'Presentation', 'Webpage', 'Document', 'Spreadsheet', 'Other']
@@ -23,7 +25,7 @@ function AdminPageInner() {
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Entry | null>(null)
-  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] as string[] })
+  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] as string[], topic: '', safe_to_share: '' })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -57,7 +59,7 @@ function AdminPageInner() {
 
   function startNew() {
     setEditing(null)
-    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] })
+    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [], topic: '', safe_to_share: '' })
     setMessage('')
   }
 
@@ -70,6 +72,8 @@ function AdminPageInner() {
       url: entry.url ?? '',
       file_type: entry.file_type ?? '',
       tags: entry.tags ?? [],
+      topic: entry.topic ?? '',
+      safe_to_share: entry.safe_to_share === true ? 'true' : entry.safe_to_share === false ? 'false' : '',
     })
     setMessage('')
   }
@@ -88,6 +92,8 @@ function AdminPageInner() {
       ...form,
       id: editing?.id,
       file_type: form.file_type || null,
+      topic: form.topic || null,
+      safe_to_share: form.safe_to_share === 'true' ? true : form.safe_to_share === 'false' ? false : null,
     }
     const res = await fetch('/api/entries', {
       method: editing ? 'PUT' : 'POST',
@@ -97,7 +103,7 @@ function AdminPageInner() {
     if (res.ok) {
       setMessage(editing ? 'Updated!' : 'Added!')
       setEditing(null)
-      setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] })
+      setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [], topic: '', safe_to_share: '' })
       fetchEntries()
     } else {
       setMessage('Something went wrong.')
@@ -161,6 +167,16 @@ function AdminPageInner() {
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
               <option value="">File type (optional)</option>
               {FILE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+
+            <input value={form.topic} onChange={e => setForm({...form, topic: e.target.value})}
+              placeholder="Product / Topic (optional)"
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+            <select value={form.safe_to_share} onChange={e => setForm({...form, safe_to_share: e.target.value})}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
+              <option value="">Sharing — not set</option>
+              <option value="true">✓ Safe to share externally</option>
+              <option value="false">⚠ Internal only</option>
             </select>
 
             {/* Kind multi-select */}
