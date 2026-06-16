@@ -120,7 +120,12 @@ function AdminPageInner() {
       <main className="max-w-3xl mx-auto px-6 py-10 space-y-8">
 
         {editing && (
-          <a href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">← Back to library</a>
+          <div className="mb-2">
+            <a href="/" className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-md transition-colors"
+              style={{ background: '#e5df00', color: '#000000' }}>
+              ← Back to library
+            </a>
+          </div>
         )}
 
         {/* Form */}
