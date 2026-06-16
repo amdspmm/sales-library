@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabaseAdmin
     .from('entries')
     .select('*')
-    .or(`title.ilike.%${q}%,summary.ilike.%${q}%,content.ilike.%${q}%`)
+    .or(`title.ilike.%${q}%,summary.ilike.%${q}%,content.ilike.%${q}%,topic.ilike.%${q}%`)
     .order('created_at', { ascending: false })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

@@ -29,8 +29,15 @@ export async function PUT(req: NextRequest) {
   const body = await req.json()
   const { id, ...fields } = body
   const update: Record<string, any> = {}
+  const optionalTextFields = new Set(['summary', 'content', 'url', 'topic'])
   for (const key of ['title', 'summary', 'content', 'url', 'file_type', 'tags', 'topic', 'safe_to_share']) {
-    if (key in fields) update[key] = fields[key]
+    if (!(key in fields)) continue
+    const val = fields[key]
+    // Don't overwrite existing DB values with empty strings for optional fields
+    if (optionalTextFields.has(key) && val === '') update[key] = null
+    // Never blank out the title
+    else if (key === 'title' && !val) continue
+    else update[key] = val
   }
   const { data, error } = await supabaseAdmin
     .from('entries')
