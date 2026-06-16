@@ -65,10 +65,7 @@ export default function TagPage() {
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    {item.url
-                      ? <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
-                      : <p className="font-semibold text-gray-900">{item.title}</p>
-                    }
+                    <a href={`/entry/${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
                     {item.summary && <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>}
                     {item.tags && item.tags.length > 0 && (
                       <div className="mt-3 flex gap-1.5 flex-wrap">
