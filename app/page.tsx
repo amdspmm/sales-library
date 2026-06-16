@@ -159,6 +159,9 @@ export default function Home() {
             <div className="space-y-2">
               {recent.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
             </div>
+            <a href="/browse" className="mt-4 inline-block text-sm text-gray-400 hover:text-gray-600 transition-colors">
+              View all {allEntries.length > 0 ? `${allEntries.length} ` : ''}assets →
+            </a>
           </div>
         )}
 
