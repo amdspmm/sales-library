@@ -1,8 +1,10 @@
 'use client'
 import { useState } from 'react'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
+import { isAdmin } from '@/lib/admins'
 
 export default function Home() {
+  const { data: session } = useSession()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -24,7 +26,9 @@ export default function Home() {
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">Sales Library</h1>
         <div className="flex gap-4 items-center">
-          <a href="/admin" className="text-sm text-gray-500 hover:text-gray-900">Manage</a>
+          {isAdmin(session?.user?.email) && (
+            <a href="/admin" className="text-sm text-gray-500 hover:text-gray-900">Manage</a>
+          )}
           <button onClick={() => signOut()} className="text-sm text-gray-500 hover:text-gray-900">Sign out</button>
         </div>
       </header>

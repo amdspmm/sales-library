@@ -1,5 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { isAdmin } from '@/lib/admins'
 
 type Entry = {
   id: string
@@ -11,6 +13,7 @@ type Entry = {
 }
 
 export default function AdminPage() {
+  const { data: session } = useSession()
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Entry | null>(null)
@@ -19,6 +22,10 @@ export default function AdminPage() {
   const [message, setMessage] = useState('')
 
   useEffect(() => { fetchEntries() }, [])
+
+  if (!isAdmin(session?.user?.email)) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-500">Access denied.</div>
+  }
 
   async function fetchEntries() {
     const res = await fetch('/api/entries')
