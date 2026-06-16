@@ -14,10 +14,10 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
   const body = await req.json()
-  const { title, summary, content, url, tags } = body
+  const { title, summary, content, url, file_type, tags } = body
   const { data, error } = await supabaseAdmin
     .from('entries')
-    .insert({ title, summary, content, url, tags })
+    .insert({ title, summary, content, url, file_type, tags })
     .select()
     .single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
   const body = await req.json()
-  const { id, title, summary, content, url, tags } = body
+  const { id, title, summary, content, url, file_type, tags } = body
   const { data, error } = await supabaseAdmin
     .from('entries')
-    .update({ title, summary, content, url, tags })
+    .update({ title, summary, content, url, file_type, tags })
     .eq('id', id)
     .select()
     .single()

@@ -9,15 +9,18 @@ type Entry = {
   summary: string
   content: string
   url: string
+  file_type: string
   tags: string[]
 }
+
+const FILE_TYPES = ['PDF', 'Video', 'Email', 'Presentation', 'Webpage', 'Document', 'Spreadsheet', 'Other']
 
 export default function AdminPage() {
   const { data: session } = useSession()
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Entry | null>(null)
-  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', tags: '' })
+  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: '' })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -47,6 +50,7 @@ export default function AdminPage() {
       summary: entry.summary,
       content: entry.content,
       url: entry.url ?? '',
+      file_type: entry.file_type ?? '',
       tags: (entry.tags ?? []).join(', '),
     })
     setMessage('')
@@ -59,6 +63,7 @@ export default function AdminPage() {
       ...form,
       tags: form.tags.split(',').map(t => t.trim()).filter(Boolean),
       id: editing?.id,
+      file_type: form.file_type || null,
     }
     const res = await fetch('/api/entries', {
       method: editing ? 'PUT' : 'POST',
@@ -68,7 +73,7 @@ export default function AdminPage() {
     if (res.ok) {
       setMessage(editing ? 'Updated!' : 'Added!')
       setEditing(null)
-      setForm({ title: '', summary: '', content: '', url: '', tags: '' })
+      setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: '' })
       fetchEntries()
     } else {
       setMessage('Something went wrong.')
@@ -108,6 +113,11 @@ export default function AdminPage() {
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <input value={form.url} onChange={e => setForm({...form, url: e.target.value})}
               placeholder="Link to asset (optional)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
+            <select value={form.file_type} onChange={e => setForm({...form, file_type: e.target.value})}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
+              <option value="">File type (optional)</option>
+              {FILE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
             <input value={form.tags} onChange={e => setForm({...form, tags: e.target.value})}
               placeholder="Tags, comma separated (e.g. CFO, ROI, objection)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <div className="flex gap-2 pt-1">
