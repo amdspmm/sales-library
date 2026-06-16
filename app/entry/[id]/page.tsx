@@ -110,7 +110,7 @@ export default function EntryPage() {
             <div className="flex items-center gap-4 mb-8">
               {entry.created_at && (
                 <span className="text-xs text-gray-400">
-                  Added {new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  Created: {new Date(entry.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })}
                 </span>
               )}
               {entry.safe_to_share === true && (

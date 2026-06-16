@@ -15,6 +15,7 @@ type Entry = {
   tags: string[]
   topic: string
   safe_to_share: boolean | null
+  created_at: string
 }
 
 const FILE_TYPES = ['PDF', 'Video', 'Email', 'Presentation', 'Webpage', 'Document', 'Spreadsheet', 'Other']
@@ -148,9 +149,16 @@ function AdminPageInner() {
 
         {/* Form */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="font-semibold text-gray-900 mb-5" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
-            {editing ? 'Edit Entry' : 'Add New Entry'}
-          </h2>
+          <div className="flex items-baseline justify-between mb-5">
+            <h2 className="font-semibold text-gray-900" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
+              {editing ? 'Edit Entry' : 'Add New Entry'}
+            </h2>
+            {editing?.created_at && (
+              <span className="text-xs text-gray-400">
+                Created: {new Date(editing.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })}
+              </span>
+            )}
+          </div>
           <form onSubmit={handleSave} className="space-y-3">
             <input required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
               placeholder="Title"
