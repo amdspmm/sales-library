@@ -20,6 +20,13 @@ export default function EntryPage() {
       .then(d => { setEntry(d.entry); setLoading(false) })
   }, [id])
 
+  // Redirect admins straight to the edit form
+  useEffect(() => {
+    if (admin && id) {
+      window.location.replace(`/admin?edit=${id}`)
+    }
+  }, [admin, id])
+
   function copyLink() {
     if (!entry?.url) return
     navigator.clipboard.writeText(entry.url)
