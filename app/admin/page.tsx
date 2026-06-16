@@ -111,8 +111,6 @@ function AdminPageInner() {
           </a>
           <div className="flex items-center gap-6">
             <a href="/browse" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Quick Edit</a>
-            <a href="/" className="text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
-              style={{ background: '#e5df00', color: '#000000' }}>← Library</a>
           </div>
         </div>
       </nav>
