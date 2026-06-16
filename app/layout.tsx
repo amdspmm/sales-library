@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sales Library",
-  description: "Docusketch Sales Library",
+  title: "DocuSketch Sales & CS Library",
+  description: "Internal sales and CS resource library for DocuSketch.",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
