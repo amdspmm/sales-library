@@ -1,6 +1,7 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
+import { useSearchParams } from 'next/navigation'
 import { isAdmin } from '@/lib/admins'
 import AssetThumbnail from '@/components/AssetThumbnail'
 
@@ -16,8 +17,9 @@ type Entry = {
 
 const FILE_TYPES = ['PDF', 'Video', 'Email', 'Presentation', 'Webpage', 'Document', 'Spreadsheet', 'Other']
 
-export default function AdminPage() {
+function AdminPageInner() {
   const { data: session } = useSession()
+  const searchParams = useSearchParams()
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Entry | null>(null)
@@ -26,6 +28,14 @@ export default function AdminPage() {
   const [message, setMessage] = useState('')
 
   useEffect(() => { fetchEntries() }, [])
+
+  useEffect(() => {
+    const editId = searchParams.get('edit')
+    if (editId && entries.length > 0) {
+      const entry = entries.find(e => e.id === editId)
+      if (entry) startEdit(entry)
+    }
+  }, [entries, searchParams])
 
   if (!isAdmin(session?.user?.email)) {
     return <div className="min-h-screen flex items-center justify-center text-gray-500">Access denied.</div>
@@ -197,5 +207,13 @@ export default function AdminPage() {
 
       </main>
     </div>
+  )
+}
+
+export default function AdminPage() {
+  return (
+    <Suspense>
+      <AdminPageInner />
+    </Suspense>
   )
 }

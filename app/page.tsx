@@ -4,7 +4,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
 import AssetThumbnail from '@/components/AssetThumbnail'
 
-function ResultCard({ item }: { item: any }) {
+function ResultCard({ item, admin }: { item: any; admin: boolean }) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors">
       <div className="flex items-start gap-4">
@@ -18,8 +18,10 @@ function ResultCard({ item }: { item: any }) {
         )}
         <div className="flex-1 min-w-0">
           {item.url
-            ? <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:text-black underline-offset-2 hover:underline">{item.title}</a>
-            : <p className="font-semibold text-gray-900">{item.title}</p>
+            ? <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
+            : admin
+              ? <a href={`/admin?edit=${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
+              : <p className="font-semibold text-gray-900">{item.title}</p>
           }
           {item.summary && <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>}
           {item.content && <p className="mt-2 text-sm text-gray-600 whitespace-pre-wrap">{item.content}</p>}
@@ -39,6 +41,7 @@ function ResultCard({ item }: { item: any }) {
 
 export default function Home() {
   const { data: session } = useSession()
+  const admin = isAdmin(session?.user?.email)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -117,7 +120,7 @@ export default function Home() {
 
         {!searched && showAll && (
           <div className="space-y-2">
-            {allEntries.map((item: any) => <ResultCard key={item.id} item={item} />)}
+            {allEntries.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
           </div>
         )}
 
@@ -125,7 +128,7 @@ export default function Home() {
           <div className="mt-2">
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">Recently Added</p>
             <div className="space-y-2">
-              {recent.map((item: any) => <ResultCard key={item.id} item={item} />)}
+              {recent.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
             </div>
           </div>
         )}
@@ -133,7 +136,7 @@ export default function Home() {
         {results.length > 0 && (
           <div className="mt-8 space-y-2">
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-3">{results.length} result{results.length !== 1 ? 's' : ''}</p>
-            {results.map((item: any) => <ResultCard key={item.id} item={item} />)}
+            {results.map((item: any) => <ResultCard key={item.id} item={item} admin={admin} />)}
           </div>
         )}
 
