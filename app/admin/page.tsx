@@ -195,7 +195,8 @@ function AdminPageInner() {
                   {entry.tags?.length > 0 && (
                     <div className="mt-2 flex gap-1 flex-wrap">
                       {entry.tags.map(tag => (
-                        <span key={tag} className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded">{tag}</span>
+                        <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
+                          className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded hover:bg-gray-200 hover:text-gray-600 transition-colors">{tag}</a>
                       ))}
                     </div>
                   )}
