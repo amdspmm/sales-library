@@ -1,96 +1,44 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
+import AssetThumbnail from '@/components/AssetThumbnail'
 
-function AssetThumbnail({ fileType }: { fileType: string }) {
-  switch (fileType) {
-    case 'PDF':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-red-50 border border-red-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" fill="#EA4335"/>
-            <text x="12" y="16" textAnchor="middle" fill="white" fontSize="7" fontWeight="bold">PDF</text>
-          </svg>
-          <span className="text-xs text-red-700 font-medium mt-1">PDF</span>
+function ResultCard({ item }: { item: any }) {
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="flex items-start gap-4">
+        {item.file_type && (
+          <div className="shrink-0">
+            {item.url
+              ? <a href={item.url} target="_blank" rel="noopener noreferrer"><AssetThumbnail fileType={item.file_type} /></a>
+              : <AssetThumbnail fileType={item.file_type} />
+            }
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          {item.url
+            ? <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-700 hover:underline">{item.title}</a>
+            : <h3 className="font-semibold text-gray-900">{item.title}</h3>
+          }
+          {item.summary && <p className="text-sm text-gray-500 mt-1">{item.summary}</p>}
+          {item.content && <p className="mt-3 text-sm text-gray-700 whitespace-pre-wrap">{item.content}</p>}
+          {item.url && (
+            <a href={item.url} target="_blank" rel="noopener noreferrer"
+              className="mt-2 block text-xs text-gray-400 hover:text-blue-600 truncate">{item.url}</a>
+          )}
+          {item.tags && item.tags.length > 0 && (
+            <div className="mt-3 flex gap-2 flex-wrap">
+              {item.tags.map((tag: string) => (
+                <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
+                  className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full hover:bg-gray-200 transition">{tag}</a>
+              ))}
+            </div>
+          )}
         </div>
-      )
-    case 'Presentation':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-yellow-50 border border-yellow-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" fill="#FBBC04"/>
-            <rect x="6" y="8" width="12" height="2" rx="1" fill="white"/>
-            <rect x="6" y="12" width="8" height="2" rx="1" fill="white"/>
-          </svg>
-          <span className="text-xs text-yellow-700 font-medium mt-1">Slides</span>
-        </div>
-      )
-    case 'Document':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-blue-50 border border-blue-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" fill="#4285F4"/>
-            <rect x="6" y="7" width="12" height="2" rx="1" fill="white"/>
-            <rect x="6" y="11" width="12" height="2" rx="1" fill="white"/>
-            <rect x="6" y="15" width="8" height="2" rx="1" fill="white"/>
-          </svg>
-          <span className="text-xs text-blue-700 font-medium mt-1">Doc</span>
-        </div>
-      )
-    case 'Spreadsheet':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-green-50 border border-green-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" fill="#34A853"/>
-            <rect x="6" y="7" width="5" height="3" rx="0.5" fill="white"/>
-            <rect x="13" y="7" width="5" height="3" rx="0.5" fill="white"/>
-            <rect x="6" y="12" width="5" height="3" rx="0.5" fill="white"/>
-            <rect x="13" y="12" width="5" height="3" rx="0.5" fill="white"/>
-          </svg>
-          <span className="text-xs text-green-700 font-medium mt-1">Sheet</span>
-        </div>
-      )
-    case 'Video':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-purple-50 border border-purple-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" fill="#7C3AED"/>
-            <path d="M10 8l6 4-6 4V8z" fill="white"/>
-          </svg>
-          <span className="text-xs text-purple-700 font-medium mt-1">Video</span>
-        </div>
-      )
-    case 'Email':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-sky-50 border border-sky-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="5" width="18" height="14" rx="2" fill="#0EA5E9"/>
-            <path d="M3 7l9 6 9-6" stroke="white" strokeWidth="1.5"/>
-          </svg>
-          <span className="text-xs text-sky-700 font-medium mt-1">Email</span>
-        </div>
-      )
-    case 'Webpage':
-      return (
-        <div className="w-14 h-14 rounded-lg bg-orange-50 border border-orange-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" fill="#F97316"/>
-            <path d="M3 8h18M8 3v18" stroke="white" strokeWidth="1.5"/>
-          </svg>
-          <span className="text-xs text-orange-700 font-medium mt-1">Web</span>
-        </div>
-      )
-    default:
-      return (
-        <div className="w-14 h-14 rounded-lg bg-gray-50 border border-gray-200 flex flex-col items-center justify-center shrink-0">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span className="text-xs text-gray-500 font-medium mt-1">Other</span>
-        </div>
-      )
-  }
+      </div>
+    </div>
+  )
 }
 
 export default function Home() {
@@ -99,6 +47,14 @@ export default function Home() {
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
+  const [recent, setRecent] = useState<any[]>([])
+  const [allEntries, setAllEntries] = useState<any[]>([])
+  const [showAll, setShowAll] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/entries?limit=3').then(r => r.json()).then(d => setRecent(d.entries ?? []))
+    fetch('/api/entries').then(r => r.json()).then(d => setAllEntries(d.entries ?? []))
+  }, [])
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -112,20 +68,30 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Sales Library</h1>
-        <div className="flex gap-4 items-center">
-          {isAdmin(session?.user?.email) && (
-            <a href="/admin" className="text-sm text-gray-500 hover:text-gray-900">Manage</a>
-          )}
-          <button onClick={() => signOut()} className="text-sm text-gray-500 hover:text-gray-900">Sign out</button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white">
+      <div className="px-6 pt-5">
+        <header className="bg-white border border-gray-100 rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm max-w-5xl mx-auto">
+          <h1 className="text-lg font-bold" style={{ fontFamily: 'Lora, Georgia, serif', color: '#000000' }}>Sales Library°</h1>
+          <div className="flex gap-4 items-center">
+            {isAdmin(session?.user?.email) && (
+              <a href="/admin" className="text-sm font-medium hover:opacity-70 transition" style={{ color: '#000000' }}>Admin</a>
+            )}
+            <button onClick={() => signOut()}
+              className="text-sm font-medium px-4 py-2 rounded-xl transition"
+              style={{ background: '#e5df00', color: '#000000' }}>
+              Sign out
+            </button>
+          </div>
+        </header>
+      </div>
 
       <main className="max-w-3xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">What do you need?</h2>
-        <p className="text-gray-500 text-center mb-8">Ask anything — how to position a feature, handle an objection, talk to a persona.</p>
+        <h2 className="page-heading mb-3 text-center" style={{ color: '#000000' }}>
+          What do you need?
+        </h2>
+        <p className="text-center mb-8 text-base" style={{ color: '#4a4e2a' }}>
+          Ask anything — how to position a feature, handle an objection, talk to a persona.
+        </p>
 
         <form onSubmit={handleSearch} className="flex gap-2">
           <input
@@ -133,52 +99,57 @@ export default function Home() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="e.g. How do I talk to a CFO about ROI?"
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2"
+            style={{ background: 'white', border: '1.5px solid #e5df00', color: '#000000' }}
           />
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
+            className="px-6 py-3 rounded-xl text-sm font-semibold disabled:opacity-50 transition"
+            style={{ background: '#e5df00', color: '#000000' }}
           >
             {loading ? 'Searching...' : 'Search'}
           </button>
         </form>
 
+        {!searched && allEntries.length > 0 && (
+          <div className="mt-3 text-center">
+            <button onClick={() => setShowAll(!showAll)} className="text-sm font-medium hover:underline mr-4" style={{ color: '#6b7a00' }}>
+              {showAll ? 'Hide list' : `Browse all ${allEntries.length} assets`}
+            </button>
+            <a href="/browse" className="text-sm hover:underline" style={{ color: '#9aa040' }}>Open full page →</a>
+          </div>
+        )}
+
+        {!searched && showAll && (
+          <div className="mt-6 space-y-3">
+            {allEntries.map((item: any) => (
+              <ResultCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+
+        {!searched && !showAll && recent.length > 0 && (
+          <div className="mt-12">
+            <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: '#9aa040' }}>Recently Added</p>
+            <div className="space-y-3">
+              {recent.map((item: any) => (
+                <ResultCard key={item.id} item={item} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {results.length > 0 && (
           <div className="mt-10 space-y-4">
             {results.map((item: any) => (
-              <div key={item.id} className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="flex items-start gap-4">
-                  {item.file_type && (
-                    <div className="shrink-0">
-                      {item.url
-                        ? <a href={item.url} target="_blank" rel="noopener noreferrer"><AssetThumbnail fileType={item.file_type} /></a>
-                        : <AssetThumbnail fileType={item.file_type} />
-                      }
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                    <p className="text-sm text-gray-500 mt-1">{item.summary}</p>
-                    {item.content && (
-                      <p className="mt-3 text-sm text-gray-700 whitespace-pre-wrap">{item.content}</p>
-                    )}
-                    {item.tags && item.tags.length > 0 && (
-                      <div className="mt-3 flex gap-2 flex-wrap">
-                        {item.tags.map((tag: string) => (
-                          <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{tag}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <ResultCard key={item.id} item={item} />
             ))}
           </div>
         )}
 
         {searched && results.length === 0 && !loading && (
-          <p className="text-center text-gray-400 mt-10 text-sm">No results found. Try a different question.</p>
+          <p className="text-center mt-10 text-sm" style={{ color: '#9aa040' }}>No results found. Try a different question.</p>
         )}
       </main>
     </div>

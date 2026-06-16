@@ -3,13 +3,14 @@ import { signIn } from 'next-auth/react'
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="bg-white p-10 rounded-2xl shadow-md text-center max-w-sm w-full">
-        <h1 className="text-2xl font-bold mb-2 text-gray-900">Sales Library</h1>
-        <p className="text-gray-500 mb-8 text-sm">Sign in with your Docusketch account</p>
+        <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: 'Lora, Georgia, serif', color: '#000000' }}>Sales Library°</h1>
+        <p className="mb-8 text-sm" style={{ color: '#6b7a00' }}>Sign in with your DocuSketch account</p>
         <button
           onClick={() => signIn('google', { callbackUrl: '/' })}
-          className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+          className="w-full flex items-center justify-center gap-3 bg-white border rounded-xl px-4 py-3 text-sm font-medium transition hover:bg-gray-50"
+          style={{ border: '1.5px solid #e5df00', color: '#000000' }}
         >
           <svg width="18" height="18" viewBox="0 0 18 18">
             <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>

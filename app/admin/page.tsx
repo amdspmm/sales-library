@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { isAdmin } from '@/lib/admins'
+import AssetThumbnail from '@/components/AssetThumbnail'
 
 type Entry = {
   id: string
@@ -39,7 +40,7 @@ export default function AdminPage() {
 
   function startNew() {
     setEditing(null)
-    setForm({ title: '', summary: '', content: '', url: '', tags: '' })
+    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: '' })
     setMessage('')
   }
 
@@ -92,13 +93,19 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Sales Library — Admin</h1>
-        <a href="/" className="text-sm text-gray-500 hover:text-gray-900">← Back to library</a>
-      </header>
+    <div className="min-h-screen bg-white">
+      <div className="px-6 pt-5">
+        <header className="bg-white rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm max-w-5xl mx-auto">
+          <h1 className="text-lg font-bold" style={{ fontFamily: 'Lora, Georgia, serif', color: '#000000' }}>Sales Library° — Admin</h1>
+          <div className="flex gap-4 items-center">
+            <a href="/browse" className="text-sm font-medium hover:opacity-70" style={{ color: '#000000' }}>Quick Edit</a>
+            <a href="/" className="text-sm font-medium px-4 py-2 rounded-xl" style={{ background: '#e5df00', color: '#000000' }}>← Back to library</a>
+          </div>
+        </header>
+      </div>
 
-      <main className="max-w-4xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <main className="max-w-4xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+
 
         {/* Form */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -106,8 +113,8 @@ export default function AdminPage() {
           <form onSubmit={handleSave} className="space-y-3">
             <input required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
               placeholder="Title" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
-            <input required value={form.summary} onChange={e => setForm({...form, summary: e.target.value})}
-              placeholder="Short summary (shown in search results)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
+            <input value={form.summary} onChange={e => setForm({...form, summary: e.target.value})}
+              placeholder="Short summary (optional)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
             <textarea value={form.content} onChange={e => setForm({...form, content: e.target.value})}
               placeholder="Full content / talking points (optional)" rows={5}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400" />
@@ -148,9 +155,16 @@ export default function AdminPage() {
               {entries.map(entry => (
                 <div key={entry.id} className="bg-white rounded-xl border border-gray-200 p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">{entry.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{entry.summary}</p>
+                    <div className="flex items-start gap-3">
+                      {entry.file_type && (
+                        <div className="shrink-0 scale-75 origin-top-left">
+                          <AssetThumbnail fileType={entry.file_type} />
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-medium text-gray-900 text-sm">{entry.title}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{entry.summary}</p>
+                      </div>
                     </div>
                     <div className="flex gap-2 shrink-0">
                       <button onClick={() => startEdit(entry)}

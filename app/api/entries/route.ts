@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
-  const { data, error } = await supabaseAdmin
-    .from('entries')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const limit = req.nextUrl.searchParams.get('limit')
+  let query = supabaseAdmin.from('entries').select('*').order('created_at', { ascending: false })
+  if (limit) query = query.limit(parseInt(limit))
+  const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ entries: data })
 }
@@ -27,10 +27,14 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
   const body = await req.json()
-  const { id, title, summary, content, url, file_type, tags } = body
+  const { id, ...fields } = body
+  const update: Record<string, any> = {}
+  for (const key of ['title', 'summary', 'content', 'url', 'file_type', 'tags']) {
+    if (key in fields) update[key] = fields[key]
+  }
   const { data, error } = await supabaseAdmin
     .from('entries')
-    .update({ title, summary, content, url, file_type, tags })
+    .update(update)
     .eq('id', id)
     .select()
     .single()
