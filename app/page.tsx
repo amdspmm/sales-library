@@ -85,8 +85,8 @@ export default function Home() {
 
       <main className="max-w-3xl mx-auto px-6 py-14">
         <div className="mb-8">
-          <h1 className="page-heading mb-2" style={{ color: '#000000' }}>What do you need?</h1>
-          <p className="text-base text-gray-500">Find assets, objection handling, personas, and more.</p>
+          <h1 className="page-heading mb-2" style={{ color: '#000000' }}>Find what you need.</h1>
+          <p className="text-base text-gray-500">Search for assets, objection handling, personas, and more.</p>
         </div>
 
         <form onSubmit={handleSearch} className="flex gap-2 mb-2">
@@ -112,7 +112,6 @@ export default function Home() {
             <button onClick={() => setShowAll(!showAll)} className="text-sm text-gray-400 hover:text-gray-600 transition-colors">
               {showAll ? 'Hide' : `Browse all ${allEntries.length} assets`}
             </button>
-            <a href="/browse" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">Full page →</a>
           </div>
         )}
 
@@ -142,6 +141,13 @@ export default function Home() {
           <p className="mt-10 text-sm text-gray-400">No results found. Try a different question.</p>
         )}
       </main>
+
+      <footer className="border-t border-gray-200 mt-16">
+        <div className="max-w-5xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="text-xs text-gray-400">© {new Date().getFullYear()} DocuSketch. All rights reserved.</p>
+          <p className="text-xs text-gray-400">Confidential — for internal use only. Do not distribute.</p>
+        </div>
+      </footer>
     </div>
   )
 }
