@@ -34,32 +34,34 @@ export default function BrowsePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="px-6 pt-5">
-        <header className="bg-white rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm max-w-5xl mx-auto">
-          <a href="/" className="text-lg font-bold" style={{ fontFamily: 'IBM Plex Sans, sans-serif', color: '#000000' }}>DocuSketch Sales & CS Library</a>
-          <div className="flex gap-4 items-center">
+    <div className="min-h-screen bg-gray-50">
+      <nav className="bg-white border-b border-gray-200">
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+          <a href="/" className="font-semibold text-gray-900 hover:text-black transition-colors" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
+            DocuSketch Sales & CS Library
+          </a>
+          <div className="flex items-center gap-6">
             {admin && (
-              <a href="/admin" className="text-sm font-medium hover:opacity-70" style={{ color: '#000000' }}>Admin</a>
+              <a href="/admin" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Admin</a>
             )}
             <button onClick={() => signOut()}
-              className="text-sm font-medium px-4 py-2 rounded-xl"
+              className="text-sm font-medium px-4 py-1.5 rounded-md transition-colors"
               style={{ background: '#e5df00', color: '#000000' }}>
               Sign out
             </button>
           </div>
-        </header>
-      </div>
+        </div>
+      </nav>
 
       <main className="max-w-3xl mx-auto px-6 py-10">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            All Assets {!loading && <span className="text-gray-400 font-normal text-lg">({entries.length})</span>}
-          </h2>
+          <h1 className="text-xl font-semibold text-gray-900" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
+            All Assets {!loading && <span className="text-gray-400 font-normal text-base">({entries.length})</span>}
+          </h1>
           {admin && (
             <button onClick={() => setEditMode(!editMode)}
-              className={`text-sm px-4 py-2 rounded-lg border transition ${editMode ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}>
-              {editMode ? 'Done editing' : 'Add URLs'}
+              className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${editMode ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'}`}>
+              {editMode ? 'Done' : 'Add URLs'}
             </button>
           )}
         </div>
@@ -67,12 +69,12 @@ export default function BrowsePage() {
         {loading ? (
           <p className="text-sm text-gray-400">Loading...</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {entries.map((item: any) => (
-              <div key={item.id} className="bg-white rounded-xl border border-gray-200 p-5">
+              <div key={item.id} className="bg-white rounded-lg border border-gray-200 p-5 hover:border-gray-300 transition-colors">
                 <div className="flex items-start gap-4">
                   {item.file_type && (
-                    <div className="shrink-0">
+                    <div className="shrink-0 mt-0.5">
                       {item.url
                         ? <a href={item.url} target="_blank" rel="noopener noreferrer"><AssetThumbnail fileType={item.file_type} /></a>
                         : <AssetThumbnail fileType={item.file_type} />
@@ -81,15 +83,15 @@ export default function BrowsePage() {
                   )}
                   <div className="flex-1 min-w-0">
                     {item.url
-                      ? <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-700 hover:underline">{item.title}</a>
+                      ? <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 hover:underline underline-offset-2">{item.title}</a>
                       : <p className="font-semibold text-gray-900">{item.title}</p>
                     }
-                    {item.summary && <p className="text-sm text-gray-500 mt-1">{item.summary}</p>}
+                    {item.summary && <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>}
                     {item.tags && item.tags.length > 0 && (
-                      <div className="mt-2 flex gap-2 flex-wrap">
+                      <div className="mt-3 flex gap-1.5 flex-wrap">
                         {item.tags.map((tag: string) => (
                           <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
-                            className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full hover:bg-gray-200 transition">{tag}</a>
+                            className="text-xs bg-gray-100 text-gray-500 px-2.5 py-1 rounded-md hover:bg-gray-200 transition-colors">{tag}</a>
                         ))}
                       </div>
                     )}
@@ -100,12 +102,13 @@ export default function BrowsePage() {
                           defaultValue={item.url ?? ''}
                           placeholder="Paste URL here..."
                           onChange={e => setUrlDrafts(prev => ({ ...prev, [item.id]: e.target.value }))}
-                          className="flex-1 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400"
                         />
                         <button
                           onClick={() => saveUrl(item.id)}
                           disabled={saving === item.id}
-                          className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                          className="text-sm px-3 py-1.5 rounded-md font-medium disabled:opacity-50"
+                          style={{ background: '#e5df00', color: '#000000' }}
                         >
                           {saving === item.id ? '...' : 'Save'}
                         </button>
@@ -113,7 +116,7 @@ export default function BrowsePage() {
                     )}
                     {!editMode && item.url && (
                       <a href={item.url} target="_blank" rel="noopener noreferrer"
-                        className="mt-1 block text-xs text-gray-400 hover:text-blue-600 truncate">{item.url}</a>
+                        className="mt-1 block text-xs text-gray-400 hover:text-gray-600 truncate">{item.url}</a>
                     )}
                   </div>
                 </div>
