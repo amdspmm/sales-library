@@ -26,7 +26,7 @@ function AdminPageInner() {
   const [entries, setEntries] = useState<Entry[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Entry | null>(null)
-  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] as string[], topic: '', safe_to_share: '' })
+  const [form, setForm] = useState({ title: '', summary: '', content: '', url: '', file_type: '', tags: [] as string[], topic: '', safe_to_share: '', created_month: '' })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
 
@@ -60,7 +60,7 @@ function AdminPageInner() {
 
   function startNew() {
     setEditing(null)
-    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [], topic: '', safe_to_share: '' })
+    setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [], topic: '', safe_to_share: '', created_month: '' })
     setMessage('')
   }
 
@@ -75,6 +75,7 @@ function AdminPageInner() {
       tags: entry.tags ?? [],
       topic: entry.topic ?? '',
       safe_to_share: entry.safe_to_share === true ? 'true' : entry.safe_to_share === false ? 'false' : '',
+      created_month: entry.created_at ? entry.created_at.slice(0, 7) : '',
     })
     setMessage('')
   }
@@ -89,13 +90,17 @@ function AdminPageInner() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
-    const body = {
+    const body: any = {
       ...form,
       id: editing?.id,
       file_type: form.file_type || null,
       topic: form.topic || null,
       safe_to_share: form.safe_to_share === 'true' ? true : form.safe_to_share === 'false' ? false : null,
     }
+    if (form.created_month) {
+      body.created_at = `${form.created_month}-01T00:00:00Z`
+    }
+    delete body.created_month
     const res = await fetch('/api/entries', {
       method: editing ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -104,7 +109,7 @@ function AdminPageInner() {
     if (res.ok) {
       setMessage(editing ? 'success' : 'added')
       if (!editing) {
-        setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [], topic: '', safe_to_share: '' })
+        setForm({ title: '', summary: '', content: '', url: '', file_type: '', tags: [], topic: '', safe_to_share: '', created_month: '' })
       }
       fetchEntries()
     } else {
@@ -195,6 +200,13 @@ function AdminPageInner() {
               <option value="true">✓ Safe to share externally</option>
               <option value="false">⚠ Internal only</option>
             </select>
+
+            {/* Created date */}
+            <div>
+              <label className="text-xs text-gray-500 block mb-1">Created / Updated date</label>
+              <input type="month" value={form.created_month} onChange={e => setForm({...form, created_month: e.target.value})}
+                className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400" />
+            </div>
 
             {/* Kind multi-select */}
             <div>

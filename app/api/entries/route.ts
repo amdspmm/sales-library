@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest) {
   const { id, ...fields } = body
   const update: Record<string, any> = {}
   const optionalTextFields = new Set(['summary', 'content', 'url', 'topic'])
-  for (const key of ['title', 'summary', 'content', 'url', 'file_type', 'tags', 'topic', 'safe_to_share']) {
+  for (const key of ['title', 'summary', 'content', 'url', 'file_type', 'tags', 'topic', 'safe_to_share', 'created_at']) {
     if (!(key in fields)) continue
     const val = fields[key]
     // Don't overwrite existing DB values with empty strings for optional fields
