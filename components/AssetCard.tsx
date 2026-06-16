@@ -34,43 +34,56 @@ export default function AssetCard({ item, admin, activeTag }: Props) {
             <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>
           )}
 
-          {/* Metadata chicklets */}
-          <div className="mt-3 flex flex-wrap gap-1.5 items-center">
+          {/* Metadata — horizontal */}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
             {item.file_type && (
-              <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-slate-700 text-white">
-                {item.file_type}
+              <span className="text-xs text-gray-500">
+                <span className="text-gray-400">Type:</span> {item.file_type}
               </span>
+            )}
+            {item.tags && item.tags.length > 0 && (
+              <>
+                {(item.file_type) && <span className="text-gray-300 text-xs">|</span>}
+                <span className="text-xs text-gray-400">Kind:</span>
+                <span className="flex flex-wrap gap-1 -ml-2">
+                  {item.tags.map((tag: string, i: number) => (
+                    <span key={tag} className="text-xs text-gray-500">
+                      <a
+                        href={`/tag/${encodeURIComponent(tag)}`}
+                        className={`hover:underline ${tag === activeTag ? 'font-semibold text-yellow-700' : ''}`}
+                      >{tag}</a>{i < item.tags.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
+                </span>
+              </>
             )}
             {item.topic && (
-              <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
-                {item.topic}
-              </span>
+              <>
+                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-xs text-gray-500">
+                  <span className="text-gray-400">Product/Topic:</span> {item.topic}
+                </span>
+              </>
             )}
-            {item.tags && item.tags.map((tag: string) => (
-              <a
-                key={tag}
-                href={`/tag/${encodeURIComponent(tag)}`}
-                className={`text-xs px-2 py-0.5 rounded-md transition-colors border ${
-                  tag === activeTag
-                    ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                    : 'bg-gray-100 text-gray-500 border-transparent hover:bg-gray-200'
-                }`}
-              >
-                {tag}
-              </a>
-            ))}
-          </div>
-
-          {/* Date + share status */}
-          <div className="mt-2 flex items-center gap-3">
             {item.created_at && (
-              <span className="text-xs text-gray-400">{formatDate(item.created_at)}</span>
+              <>
+                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-xs text-gray-500">
+                  <span className="text-gray-400">Added:</span> {formatDate(item.created_at)}
+                </span>
+              </>
             )}
             {item.safe_to_share === true && (
-              <span className="text-xs text-green-700 font-medium">✓ Safe to share externally</span>
+              <>
+                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-xs font-medium text-green-700">✓ Safe to share</span>
+              </>
             )}
             {item.safe_to_share === false && (
-              <span className="text-xs text-red-600 font-medium">⚠ Internal only</span>
+              <>
+                <span className="text-gray-300 text-xs">|</span>
+                <span className="text-xs font-medium text-red-600">⚠ Internal only</span>
+              </>
             )}
           </div>
         </div>
