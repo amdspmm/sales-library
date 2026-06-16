@@ -117,7 +117,7 @@ function AdminPageInner() {
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+      <main className="max-w-3xl mx-auto px-6 py-10 space-y-8">
 
         {/* Form */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
