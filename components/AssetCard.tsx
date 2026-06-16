@@ -14,7 +14,7 @@ function cardBg(safe: boolean | null | undefined) {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
 
 export default function AssetCard({ item, admin, activeTag }: Props) {
@@ -69,7 +69,7 @@ export default function AssetCard({ item, admin, activeTag }: Props) {
               <>
                 <span className="text-gray-300 text-xs">|</span>
                 <span className="text-xs text-gray-500">
-                  <span className="text-gray-400">Added:</span> {formatDate(item.created_at)}
+                  <span className="text-gray-400">Created:</span> {formatDate(item.created_at)}
                 </span>
               </>
             )}
