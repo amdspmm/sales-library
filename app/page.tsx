@@ -86,8 +86,8 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-[#f4f3ea]">
+      <nav className="bg-white border-b border-[#e2e0d3]">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <span className="font-semibold text-gray-900" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             DocuSketch Sales & CS Library
@@ -122,17 +122,17 @@ export default function Home() {
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
                 onKeyDown={handleKeyDown}
                 placeholder="e.g. How do I talk to a CFO about ROI?"
-                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-100"
+                className="w-full rounded-md border border-[#d4d2c9] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac] focus:ring-2 focus:ring-gray-100"
                 autoComplete="off"
               />
               {showSuggestions && suggestions.length > 0 && (
-                <ul className="absolute z-10 top-full mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden">
+                <ul className="absolute z-10 top-full mt-1 w-full bg-white border border-[#e2e0d3] rounded-md shadow-lg overflow-hidden">
                   {suggestions.map((item, i) => (
                     <li
                       key={item.id}
                       onMouseDown={() => handleSuggestionClick(item)}
                       className={`px-4 py-2.5 text-sm cursor-pointer flex items-center gap-3 ${
-                        i === highlightedIndex ? 'bg-gray-100' : 'hover:bg-gray-50'
+                        i === highlightedIndex ? 'bg-[#eeede6]' : 'hover:bg-[#f4f3ea]'
                       }`}
                     >
                       <span className="text-gray-400 text-xs shrink-0">{item.file_type ?? 'Asset'}</span>
@@ -162,7 +162,7 @@ export default function Home() {
                 className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
                   activeTag === tag
                     ? 'border-transparent font-medium'
-                    : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                    : 'bg-white border-[#e2e0d3] text-gray-600 hover:border-[#b8b6ac]'
                 }`}
                 style={activeTag === tag ? { background: '#e5df00', color: '#000000', borderColor: '#e5df00' } : {}}
               >
@@ -210,7 +210,7 @@ export default function Home() {
         )}
       </main>
 
-      <footer className="border-t border-gray-200 mt-16">
+      <footer className="border-t border-[#e2e0d3] mt-16">
         <div className="max-w-5xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-xs text-gray-400">© {new Date().getFullYear()} DocuSketch. All rights reserved.</p>
           <p className="text-xs text-gray-400">Confidential — for internal use only. Do not distribute.</p>

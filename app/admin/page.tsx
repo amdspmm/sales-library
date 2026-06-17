@@ -129,8 +129,8 @@ function AdminPageInner() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-[#f4f3ea]">
+      <nav className="bg-white border-b border-[#e2e0d3]">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <a href="/" className="font-semibold text-gray-900 hover:text-black transition-colors" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             DocuSketch Sales & CS Library
@@ -153,7 +153,7 @@ function AdminPageInner() {
         )}
 
         {/* Form */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-[#e2e0d3] p-6">
           <div className="flex items-baseline justify-between mb-5">
             <h2 className="font-semibold text-gray-900" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
               {editing ? 'Edit Entry' : 'Add New Entry'}
@@ -167,24 +167,24 @@ function AdminPageInner() {
           <form onSubmit={handleSave} className="space-y-3">
             <input required value={form.title} onChange={e => setForm({...form, title: e.target.value})}
               placeholder="Title"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac]" />
             <input value={form.summary} onChange={e => setForm({...form, summary: e.target.value})}
               placeholder="Short summary (optional)"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac]" />
             <textarea value={form.content} onChange={e => setForm({...form, content: e.target.value})}
               placeholder="Full content / talking points (optional)" rows={4}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac]" />
             <input value={form.url} onChange={e => setForm({...form, url: e.target.value})}
               placeholder="Link to asset (optional)"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400" />
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac]" />
             <select value={form.file_type} onChange={e => setForm({...form, file_type: e.target.value})}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#b8b6ac]">
               <option value="">File type (optional)</option>
               {FILE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
 
             <select value={form.topic} onChange={e => setForm({...form, topic: e.target.value})}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#b8b6ac]">
               <option value="">Product / Topic (optional)</option>
               <option>Sketching</option>
               <option>Mitigation</option>
@@ -195,7 +195,7 @@ function AdminPageInner() {
               <option>Other</option>
             </select>
             <select value={form.safe_to_share} onChange={e => setForm({...form, safe_to_share: e.target.value})}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400">
+              className="w-full border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#b8b6ac]">
               <option value="">Sharing — not set</option>
               <option value="true">✓ Safe to share externally</option>
               <option value="false">⚠ Internal only</option>
@@ -205,7 +205,7 @@ function AdminPageInner() {
             <div>
               <label className="text-xs text-gray-500 block mb-1">Created / Updated date</label>
               <input type="month" value={form.created_month} onChange={e => setForm({...form, created_month: e.target.value})}
-                className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-gray-400" />
+                className="border border-[#d4d2c9] rounded-md px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#b8b6ac]" />
             </div>
 
             {/* Kind multi-select */}
@@ -221,7 +221,7 @@ function AdminPageInner() {
                       className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
                         form.tags.includes(kind)
                           ? 'border-transparent font-medium'
-                          : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
+                          : 'bg-white border-[#e2e0d3] text-gray-600 hover:border-[#b8b6ac]'
                       }`}
                       style={form.tags.includes(kind) ? { background: '#e5df00', color: '#000000', borderColor: '#e5df00' } : {}}
                     >
@@ -237,7 +237,7 @@ function AdminPageInner() {
                 <input
                   type="text"
                   placeholder="Add a new kind..."
-                  className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  className="flex-1 border border-[#d4d2c9] rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac]"
                   onKeyDown={e => {
                     if (e.key === 'Enter') {
                       e.preventDefault()
@@ -261,7 +261,7 @@ function AdminPageInner() {
               </button>
               {editing && (
                 <button type="button" onClick={startNew}
-                  className="border border-gray-300 text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-gray-50">
+                  className="border border-[#d4d2c9] text-gray-600 px-4 py-2 rounded-md text-sm hover:bg-[#f4f3ea]">
                   Cancel
                 </button>
               )}
@@ -286,7 +286,7 @@ function AdminPageInner() {
 
         {/* User preview */}
         {editing && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="bg-white rounded-lg border border-[#e2e0d3] p-6">
             <p className="text-xs font-medium uppercase tracking-widest text-gray-400 mb-5">What users see</p>
             <div className="flex items-start gap-4 mb-4">
               {form.file_type && (
@@ -303,7 +303,7 @@ function AdminPageInner() {
             </div>
             {form.summary && <p className="text-base text-gray-600 leading-relaxed mb-4">{form.summary}</p>}
             {form.content && (
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 mb-4">
+              <div className="bg-[#f4f3ea] rounded-lg border border-[#e2e0d3] p-4 mb-4">
                 <p className="text-sm font-medium text-gray-500 mb-2">Details</p>
                 <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{form.content}</p>
               </div>
@@ -316,7 +316,7 @@ function AdminPageInner() {
                 <span className="text-xs font-medium px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">{form.topic}</span>
               )}
               {form.tags.map(tag => (
-                <span key={tag} className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-500">{tag}</span>
+                <span key={tag} className="text-xs px-2.5 py-1 rounded-md bg-[#eeede6] text-gray-500">{tag}</span>
               ))}
             </div>
             <div className="flex items-center gap-4 mb-5">
@@ -337,7 +337,7 @@ function AdminPageInner() {
                 </a>
               )}
               {form.url && (
-                <span className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-gray-300 bg-white text-gray-600">
+                <span className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-[#d4d2c9] bg-white text-gray-600">
                   Copy link
                 </span>
               )}
@@ -358,7 +358,7 @@ function AdminPageInner() {
           ) : (
             <div className="space-y-2">
               {entries.map(entry => (
-                <div key={entry.id} className="bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors">
+                <div key={entry.id} className="bg-white rounded-lg border border-[#e2e0d3] p-4 hover:border-[#d4d2c9] transition-colors">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-start gap-3 min-w-0">
                       {entry.file_type && (
@@ -380,7 +380,7 @@ function AdminPageInner() {
                     <div className="mt-2 flex gap-1 flex-wrap">
                       {entry.tags.map(tag => (
                         <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
-                          className="text-xs bg-gray-100 text-gray-400 px-2 py-0.5 rounded hover:bg-gray-200 hover:text-gray-600 transition-colors">{tag}</a>
+                          className="text-xs bg-[#eeede6] text-gray-400 px-2 py-0.5 rounded hover:bg-gray-200 hover:text-gray-600 transition-colors">{tag}</a>
                       ))}
                     </div>
                   )}

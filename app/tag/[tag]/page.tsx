@@ -21,8 +21,8 @@ export default function TagPage() {
   }, [tag])
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-[#f4f3ea]">
+      <nav className="bg-white border-b border-[#e2e0d3]">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <a href="/" className="font-semibold text-gray-900 hover:text-black transition-colors" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             DocuSketch Sales & CS Library

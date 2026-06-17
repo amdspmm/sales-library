@@ -35,8 +35,8 @@ export default function EntryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-[#f4f3ea]">
+      <nav className="bg-white border-b border-[#e2e0d3]">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <a href="/" className="font-semibold text-gray-900 hover:text-black transition-colors" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             DocuSketch Sales & CS Library
@@ -84,7 +84,7 @@ export default function EntryPage() {
             )}
 
             {entry.content && (
-              <div className="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+              <div className="bg-white rounded-lg border border-[#e2e0d3] p-5 mb-6">
                 <p className="text-sm font-medium text-gray-500 mb-2">Details</p>
                 <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{entry.content}</p>
               </div>
@@ -100,7 +100,7 @@ export default function EntryPage() {
               )}
               {entry.tags && entry.tags.map((tag: string) => (
                 <a key={tag} href={`/tag/${encodeURIComponent(tag)}`}
-                  className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors">
+                  className="text-xs px-2.5 py-1 rounded-md bg-[#eeede6] text-gray-500 hover:bg-gray-200 transition-colors">
                   {tag}
                 </a>
               ))}
@@ -131,13 +131,13 @@ export default function EntryPage() {
               )}
               {entry.url && (
                 <button onClick={copyLink}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-gray-300 bg-white text-gray-600 hover:border-gray-400 transition-colors">
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-[#d4d2c9] bg-white text-gray-600 hover:border-[#b8b6ac] transition-colors">
                   {copied ? '✓ Copied' : 'Copy link'}
                 </button>
               )}
               {admin && (
                 <a href={`/admin?edit=${entry.id}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-gray-300 bg-white text-gray-600 hover:border-gray-400 transition-colors ml-auto">
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium border border-[#d4d2c9] bg-white text-gray-600 hover:border-[#b8b6ac] transition-colors ml-auto">
                   Edit
                 </a>
               )}

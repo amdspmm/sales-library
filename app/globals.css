@@ -3,9 +3,12 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #1a1c0a;
+  --foreground: #1a1905;
   --ds-yellow: #e5df00;
-  --ds-dark: #1a1c0a;
+  --ds-dark: #1a1905;
+  --ds-cream: #f4f3ea;
+  --ds-border: #e2e0d3;
+  --ds-border-light: #eeede6;
 }
 
 body {

@@ -34,8 +34,8 @@ export default function BrowsePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-[#f4f3ea]">
+      <nav className="bg-white border-b border-[#e2e0d3]">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <a href="/" className="font-semibold text-gray-900 hover:text-black transition-colors" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
             DocuSketch Sales & CS Library
@@ -61,7 +61,7 @@ export default function BrowsePage() {
           </h1>
           {admin && (
             <button onClick={() => setEditMode(!editMode)}
-              className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${editMode ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'}`}>
+              className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${editMode ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-[#d4d2c9] hover:border-[#b8b6ac]'}`}>
               {editMode ? 'Done' : 'Add URLs'}
             </button>
           )}
@@ -81,7 +81,7 @@ export default function BrowsePage() {
                       defaultValue={item.url ?? ''}
                       placeholder="Paste URL here..."
                       onChange={e => setUrlDrafts(prev => ({ ...prev, [item.id]: e.target.value }))}
-                      className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                      className="flex-1 border border-[#d4d2c9] rounded-md px-3 py-1.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac]"
                     />
                     <button
                       onClick={() => saveUrl(item.id)}

@@ -78,7 +78,7 @@ export default function AssetThumbnail({ fileType }: { fileType: string }) {
       )
     default:
       return (
-        <div className="w-14 h-14 rounded-lg bg-gray-50 border border-gray-200 flex flex-col items-center justify-center shrink-0">
+        <div className="w-14 h-14 rounded-lg bg-[#f4f3ea] border border-[#e2e0d3] flex flex-col items-center justify-center shrink-0">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>

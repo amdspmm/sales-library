@@ -10,7 +10,7 @@ type Props = {
 function cardBg(safe: boolean | null | undefined) {
   if (safe === true) return 'bg-green-50 border-green-200 hover:border-green-300'
   if (safe === false) return 'bg-red-50 border-red-200 hover:border-red-300'
-  return 'bg-white border-gray-200 hover:border-gray-300'
+  return 'bg-white border-[#e2e0d3] hover:border-[#d4d2c9]'
 }
 
 function formatDate(iso: string) {
