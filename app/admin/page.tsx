@@ -141,16 +141,19 @@ function AdminPageInner() {
         </div>
       </nav>
 
-      <main className="max-w-3xl mx-auto px-6 py-10 space-y-8">
+      <main className={`mx-auto px-6 py-10 ${editing ? 'max-w-6xl' : 'max-w-3xl space-y-8'}`}>
 
         {editing && (
-          <div className="mb-2">
+          <div className="mb-4">
             <a href="/" className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-md transition-colors"
               style={{ background: '#e5df00', color: '#000000' }}>
               ← Back to library
             </a>
           </div>
         )}
+
+        {/* Two-column layout when editing */}
+        <div className={editing ? 'grid grid-cols-2 gap-6 items-start' : 'space-y-8'}>
 
         {/* Form */}
         <div className="bg-white rounded-lg border border-[#e2e0d3] p-6">
@@ -345,6 +348,8 @@ function AdminPageInner() {
             </div>
           </div>
         )}
+
+        </div>{/* end grid */}
 
         {/* Entry list */}
         {!editing && <div>
