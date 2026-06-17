@@ -74,13 +74,13 @@ export default function AssetCard({ item, admin, activeTag }: Props) {
             {item.safe_to_share === true && (
               <>
                 <span className="text-gray-300 text-xs">|</span>
-                <span className="text-xs font-medium text-green-700">✓ Safe to share</span>
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700">✓ Safe to share</span>
               </>
             )}
             {item.safe_to_share === false && (
               <>
                 <span className="text-gray-300 text-xs">|</span>
-                <span className="text-xs font-medium text-red-600">⚠ Internal only</span>
+                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700">⚠ Internal only</span>
               </>
             )}
           </div>
