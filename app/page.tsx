@@ -123,7 +123,7 @@ export default function Home() {
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
                 onKeyDown={handleKeyDown}
-                placeholder="e.g. How do I talk to a CFO about ROI?"
+                placeholder="What are you looking for?"
                 className="w-full rounded-md border border-[#d4d2c9] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#b8b6ac] focus:ring-2 focus:ring-gray-100"
                 autoComplete="off"
               />
