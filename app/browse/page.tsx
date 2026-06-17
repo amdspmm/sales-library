@@ -70,7 +70,7 @@ export default function BrowsePage() {
         {loading ? (
           <p className="text-sm text-gray-400">Loading...</p>
         ) : (
-          <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-3">
             {entries.map((item: any) => (
               <div key={item.id}>
                 <AssetCard item={item} admin={admin} />
