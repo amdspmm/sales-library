@@ -93,6 +93,8 @@ export default function Home() {
             DocuSketch Sales & CS Library
           </span>
           <div className="flex items-center gap-6">
+            <a href="/browse" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">View all assets</a>
+            <a href="/request" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Request an asset</a>
             {isAdmin(session?.user?.email) && (
               <a href="/admin" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">Admin</a>
             )}
