@@ -25,9 +25,17 @@ export default function AssetCard({ item, admin, activeTag }: Props) {
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <a href={`/entry/${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2 leading-snug">
-            {item.title}
-          </a>
+          <div className="flex items-start justify-between gap-3">
+            <a href={`/entry/${item.id}`} className="font-semibold text-gray-900 hover:underline underline-offset-2 leading-snug flex-1">
+              {item.title}
+            </a>
+            {item.safe_to_share === true && (
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 shrink-0 mt-0.5">✓ Safe to share</span>
+            )}
+            {item.safe_to_share === false && (
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700 shrink-0 mt-0.5">⚠ Internal only</span>
+            )}
+          </div>
           {item.summary && (
             <p className="text-sm text-gray-500 mt-1 leading-relaxed">{item.summary}</p>
           )}
@@ -69,18 +77,6 @@ export default function AssetCard({ item, admin, activeTag }: Props) {
                 <span className="text-xs text-gray-500">
                   <span className="text-gray-400">Created:</span> {formatDate(item.created_at)}
                 </span>
-              </>
-            )}
-            {item.safe_to_share === true && (
-              <>
-                <span className="text-gray-300 text-xs">|</span>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700">✓ Safe to share</span>
-              </>
-            )}
-            {item.safe_to_share === false && (
-              <>
-                <span className="text-gray-300 text-xs">|</span>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 text-red-700">⚠ Internal only</span>
               </>
             )}
           </div>
