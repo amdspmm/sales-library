@@ -301,7 +301,6 @@ function AdminPageInner() {
                 <h2 className="text-xl font-semibold text-gray-900 leading-snug" style={{ fontFamily: 'IBM Plex Sans, sans-serif' }}>
                   {form.title || <span className="text-gray-300">Title</span>}
                 </h2>
-                {form.file_type && <p className="text-sm text-gray-400 mt-1">{form.file_type}</p>}
               </div>
             </div>
             {form.summary && <p className="text-base text-gray-600 leading-relaxed mb-4">{form.summary}</p>}
